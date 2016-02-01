@@ -1,0 +1,97 @@
+import java.util.Scanner;
+import java.io.File;
+
+public class DupHT{
+     public static void main(String []args){
+      long startTime = System.currentTimeMillis();
+        try 
+      {//the file is being read
+         Scanner sc = new Scanner(new File("ph.txt"));
+        //creating a HashTable named t 
+         MyHashTable t = new MyHashTable();
+         int count=0;
+     while (sc.hasNext())
+     {
+     //reading each value from the line into a string ph 
+      String ph = sc.nextLine();
+      if(t.add(ph)){//After adding the value to the table increment the count so that we will get to know how many entries have been added
+      count++; 
+      }
+     }
+     System.out.println(count +" numbers have been added to Hashtable");
+     for(int i=0;i<=10000;i++){
+      if(t.Table[i]!=null){//To check whether in the table at that position there is any value present or not, if its not present then don't check them
+       int h,h1;
+       String ph=t.Table[i];
+           String sub=ph.substring(10);
+           h=Integer.parseInt(sub);
+           String sub2=ph.substring(7,9);
+           h1=Integer.parseInt(sub2)%100;
+           if(t.Table[i+1]!=null && t.Table[i+1].equals(ph))////To check whether the value is present at the 'i+1'th location
+           {
+           System.out.println(ph +" is duplicate  ");       
+           }
+           if(t.Table[i+8]!=null && t.Table[i+8].equals(ph))//To check whether the value is present at the 'i+8'th location 
+           {
+           System.out.println(ph +" is duplicate  ");            
+           }
+           if(t.Table[i+32]!=null && t.Table[i+32].equals(ph))//To check whether the value is present at the 'i+32'th location
+           {
+           System.out.println(ph +" is duplicate  ");  
+           }
+           if(t.Table[h1+10000]!=null && t.Table[h1+10000].equals(ph))//To check whether the value is present at the 'h1+10000'th location
+           {
+           System.out.println(ph +" is duplicate  ");
+           }
+      }
+     }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println(totalTime +"ms");
+      }
+      catch (Exception e)
+      {
+          System.out.println("Exception " + e);
+   System.exit(1);
+      }
+     }
+}
+
+public class MyHashTable {
+ public String[] Table = new String[10111];
+ public boolean add(String ph){
+    int h,h1;
+       String sub=ph.substring(10);//To take the last 4 digits of the string  
+       h=Integer.parseInt(sub);//Converting that string into integer
+       if(Table[h]==null)//If the index in the table is null meaning that its not full or there's nothing in that position then add that phone no into that position
+       {
+           Table[h]=ph;
+           return true;//When a value is being added then return "true"
+       }else if(Table[h+1]==null){//When the value in mapped function already exists then go to position "h+1" and check whether its null or not and 
+           Table[h+1]=ph;		  //When its not null add the value at that position	
+           return true;   
+        }else if(Table[h+2]==null){//When the value in mapped function already exists then go to position "h+2" and check whether its null or not and
+           Table[h+2]=ph;          //When its not null add the value at that position
+           return true;
+        }else if(Table[h+8]==null){//When the value in mapped function already exists then go to position "h+8" and check whether its null or not and
+           Table[h+8]=ph;          //When its not null add the value at that position
+           return true;
+        }else if(Table[h+32]==null){//When the value in mapped function already exists then go to position "h+32" and check whether its null or not and
+           Table[(h+32)]=ph;        //When its not null add the value at that position
+           return true;
+        }else if(Table[h+64]==null){//When the value in mapped function already exists then go to position "h+64" and check whether its null or not and
+           Table[(h+64)]=ph;	    //When its not null add the value at that position
+           return true;
+        }else{ //When all values cannot be fit in the table size for the above logic we are considering the logic for the 3 digits 
+         String sub2=ph.substring(7,9);// And then mapping them to the position with a "h1+10000" 
+         h1=Integer.parseInt(sub2)%100;
+         if(Table[h1+10000]==null){ 
+           Table[h1+10000]=ph;
+           return true;
+         }else{
+          return false;
+         }
+        }
+       
+ }
+}
